@@ -1,0 +1,10 @@
+API REST AULA 13- MARIADB
+
+user: root
+password: root
+host: localhost
+database: usuarios
+
+Comando iniciar docker após para e removes com - docker stop e docker remove : 
+
+docker run -it -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql
