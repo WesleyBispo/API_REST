@@ -2,12 +2,11 @@ require('dotenv').config();
 
 module.exports = {
   dialect: 'mysql',
-  host: '127.0.0.1',
-  port: 3307,
-  username: 'root',
-  password: 'root',
-  database: 'escola',
-  timezone: 'America/Sao_Paulo',
+  host: process.env.DATABASE_HOST,
+  port: process.env.DATABASE_PORT,
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   define: {
     timestamps: true,
     underscored: true,
