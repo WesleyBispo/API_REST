@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import userController from '../controllers/UserController';
-
+import AuthenticationMiddleware from '../middlewares/AuthenticationMiddleware';
 const router = new Router();
 
 router.post('/', userController.store);

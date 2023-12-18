@@ -4,83 +4,65 @@ class UserController {
   async store(req, res) {
     try {
       const novoUser = await User.create(req.body);
-      res.json(novoUser);
+      return res.status(201).json(novoUser);
     } catch (erro) {
-      res.status(400).json({
-        errors: erro.errors.map((err) => err.message),
-      });
+      if (erro.errors) {
+        return res.status(400).json({ errors: erro.errors.map((err) => err.message) });
+      }
+      return res.status(500).json({ errors: ['Erro interno'] });
     }
   }
 
-  // Index
   async index(req, res) {
     try {
       const users = await User.findAll();
-      res.status(200).json(users);
+      return res.status(200).json(users);
     } catch (erro) {
-      res.json({
-        errors: ['Erro ao listar todos os usuários'],
-      });
+      return res.status(500).json({ errors: ['Erro ao listar todos os usuários'] });
     }
   }
 
-  // Show
   async show(req, res) {
     try {
       const { id } = req.params;
       const user = await User.findByPk(id);
-      res.json(user);
+      if (!user) {
+        return res.status(404).json({ errors: ['Usuário não encontrado'] });
+      }
+      return res.status(200).json(user);
     } catch (erro) {
-      res.json(null);
+      return res.status(500).json({ errors: ['Erro ao buscar o usuário'] });
     }
   }
 
-  // Update
   async update(req, res) {
     try {
-      if (!req.params.id) {
-        res.status(400).json({
-          errors: ['ID não definido'],
-        });
-      }
-      const user = await User.findByPk(req.params.id);
-
+      const { id } = req.params;
+      const user = await User.findByPk(id);
       if (!user) {
-        res.status(400).json({
-          errors: ['Usuário não existe'],
-        });
+        return res.status(404).json({ errors: ['Usuário não encontrado'] });
       }
-
       const novosDados = await user.update(req.body);
-      res.status(200).json(novosDados);
+      return res.status(200).json(novosDados);
     } catch (erro) {
-      res.status(400).json({
-        errors: erro.errors.map((err) => err.message),
-      });
+      if (erro.errors) {
+        return res.status(400).json({ errors: erro.errors.map((err) => err.message) });
+      }
+      return res.status(500).json({ errors: ['Erro ao atualizar o usuário'] });
     }
   }
-
-  // Delete
 
   async delete(req, res) {
     try {
-      if (!req.params.id) {
-        res.status(400).json({ errors: ['ID não defindo'] });
-      }
-      const user = await User.findByPk(req.params.id);
-
+      const { id } = req.params;
+      const user = await User.findByPk(id);
       if (!user) {
-        res.status(400).json({
-          errors: ['Usuário não existe'],
-        });
+        return res.status(404).json({ errors: ['Usuário não encontrado'] });
       }
-
       await user.destroy();
-      res.json(user);
+      return res.status(204).json();
     } catch (erro) {
-      res.status(400).json({
-        errors: erro.errors.map((err) => err.message),
-      });
+      return res.status(500).json({ errors: ['Erro ao excluir o usuário'] });
     }
   }
 }
