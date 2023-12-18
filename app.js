@@ -1,6 +1,8 @@
 require('dotenv').config();
+import './src/database';
 import express from 'express';
 import homeRoute from './src/routes/homeRoute';
+import userRoute from './src/routes/userRoute';
 
 class App {
   constructor() {
@@ -16,6 +18,7 @@ class App {
 
   routes() {
     this.app.use('/', homeRoute);
+    this.app.use('/users', userRoute);
   }
 }
 
