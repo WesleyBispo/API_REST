@@ -11,9 +11,6 @@ module.exports = {
     timestamps: true,
     underscored: true,
     underscoredAll: true,
-    createdAt: 'created_At',
-    updatedAt: 'updated_At',
-
   },
   dialectOptions: {
     timezone: 'America/Sao_Paulo',
