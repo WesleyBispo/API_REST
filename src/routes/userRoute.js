@@ -3,10 +3,11 @@ import userController from '../controllers/UserController';
 import AuthenticationMiddleware from '../middlewares/AuthenticationMiddleware';
 const router = new Router();
 
+router.get('/', userController.index); // Lista users
+router.get('/:id', userController.show); // Lista user
+
 router.post('/', userController.store);
-router.get('/', userController.index);
-router.get('/:id', userController.show);
-router.put('/:id', userController.update);
-router.delete('/:id', userController.delete);
+router.put('/', AuthenticationMiddleware.authenticate, userController.update);
+router.delete('/', AuthenticationMiddleware.authenticate, userController.delete);
 
 export default router;

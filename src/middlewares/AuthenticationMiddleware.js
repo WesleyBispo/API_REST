@@ -1,8 +1,9 @@
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
+import User from '../models/User';
 
 class AuthenticationMiddleware {
-  authenticate(req, res, next) {
+  async authenticate(req, res, next) {
     const { authorization } = req.headers;
     if (!authorization) return res.status(401).json({ errors: ['Faça o Login'] });
     const token = req.headers.authorization?.split(' ')[1];
@@ -15,8 +16,18 @@ class AuthenticationMiddleware {
       if (payload.exp < Date.now() / 1000) {
         return res.status(401).json({ errors: ['Token expirado'] });
       }
-
-      req.user = payload;
+      const { id, email } = payload;
+      req.userId = id;
+      req.userEmail = email;
+      const user = await User.findOne({
+        where: {
+          id,
+          email,
+        },
+      });
+      if (!user) {
+        return res.status(401).json({ errors: ['Usuário inválido'] });
+      }
       return next();
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {
