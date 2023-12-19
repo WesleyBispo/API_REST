@@ -5,7 +5,7 @@ import User from '../models/User';
 class AuthenticationMiddleware {
   async authenticate(req, res, next) {
     const { authorization } = req.headers;
-    if (!authorization) return res.status(401).json({ errors: ['Faça o Login'] });
+    if (!authorization) return res.status(401).json({ errors: ['Login Required'] });
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       return res.status(401).json({ errors: ['Token não enviado'] });

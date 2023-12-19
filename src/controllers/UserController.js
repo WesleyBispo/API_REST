@@ -8,7 +8,7 @@ class UserController {
       return res.status(201).json({ id, nome, email });
     } catch (erro) {
       if (erro.errors) {
-        return res.status(400).json({ errors: erro.errors.map((err) => err.message) });
+        return res.status(400).json({ errors: ['Erro ao criar User', erro.errors.map((err) => err.message)] });
       }
       return res.status(500).json({ errors: ['Erro interno'] });
     }
@@ -49,7 +49,7 @@ class UserController {
       if (erro.errors) {
         return res.status(400).json({ errors: erro.errors.map((err) => err.message) });
       }
-      return res.status(500).json({ errors: ['Erro ao atualizar o usuário'] });
+      return res.status(500).json({ errors: ['Erro ao atualizar o usuário', erro.error.map((err) => err.message)] });
     }
   }
 

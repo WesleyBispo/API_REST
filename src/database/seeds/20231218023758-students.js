@@ -1,7 +1,7 @@
 module.exports = {
   up: async (queryInterface) => {
-    // Inserindo os alunos usando o método bulkInsert
-    await queryInterface.bulkInsert('alunos', [
+    // Inserindo os students usando o método bulkInsert
+    await queryInterface.bulkInsert('students', [
       {
         nome: 'João da Silva',
         sobrenome: 'Santos',
@@ -36,7 +36,7 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    // Removendo todos os alunos da tabela
-    await queryInterface.bulkDelete('alunos', null, {});
+    // Removendo todos os students da tabela
+    await queryInterface.bulkDelete('students', null, {});
   },
 };
