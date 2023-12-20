@@ -37,7 +37,7 @@ class TokenController {
         email,
       };
       const token = await jwt.sign(payload, process.env.TOKEN_SECRET, {
-        expiresIn: 3000,
+        expiresIn: process.env.TOKEN_EXPIRATION,
       });
       return res.json({
         token,
