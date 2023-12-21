@@ -8,5 +8,16 @@ const models = [Student, User, Image];
 
 const connection = new Sequelize(databaseConfig);
 
+const checkConnection = async () => {
+  try {
+    await connection.authenticate();
+    console.log('Conexão estabelecida com sucesso.');
+  } catch (error) {
+    console.error('Erro ao conectar ao banco de dados:', error);
+  }
+};
+
 models.forEach((model) => model.init(connection));
 models.forEach((model) => model.associate && model.associate(connection.models));
+
+checkConnection();
