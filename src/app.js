@@ -1,11 +1,11 @@
 require('dotenv').config();
-import './src/database';
+import './database';
 import express from 'express';
-import homeRoute from './src/routes/homeRoute';
-import userRoute from './src/routes/userRoute';
-import tokenRoute from './src/routes/tokenRoute';
-import studentRoute from './src/routes/studentRoute';
-import imageRoute from './src/routes/imageRoute';
+import homeRoute from './routes/homeRoute';
+import userRoute from './routes/userRoute';
+import tokenRoute from './routes/tokenRoute';
+import studentRoute from './routes/studentRoute';
+import imageRoute from './routes/imageRoute';
 class App {
   constructor() {
     this.app = express();

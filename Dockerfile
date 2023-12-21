@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # TRUQUE PARA NÃO RODAR O NPM RUN DEV OU START PARA DEPENDE DO DB LÁ NO DOCKER-COMPOSE
-CMD ["tail", "-f", "/dev/null"] 
+CMD ["tail", "-f", "/dev/null"]
