@@ -1,2 +1,6 @@
 .env.example
 README.md
+nodemosn.json
+.eslintrc.js
+.gitignore
+.editorconfig
