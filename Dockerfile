@@ -1,5 +1,5 @@
 # BAIXA UMA VERSÃO ALPINE DO LINUX, BEM PEQUENA E O NODE NA VERSÃO 18
-FROM node:18-alpine
+FROM node:16-alpine
 # DEFINE ONDE SERÁ O DIRETÓRIO DO NOSSO APP
 WORKDIR /usr/src/app
 
@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # INSTALA AS DEPENDCIAS E LIMPA O CACHE PARA DEIXAR IMAGEM MENOR
-RUN npm install && npm cache clean --force
+RUN npm install --only=prod && npm cache clean --force
 
 # COPIA TODOS ARQUIVOS DA RAIZ PARA NOSSO WORKDIR
 COPY . .

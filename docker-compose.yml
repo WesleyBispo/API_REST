@@ -40,7 +40,10 @@ services:
       - uploads:/usr/src/app/uploads  # Cria um volume para a pasta de uploads
     networks:
       - backend_network  # Conecta o serviço à rede chamada "backend_network"
-    command: ["npm", "run", "dev"]  # Comando para iniciar a aplicação com nodemon
+    command: 
+      - /bin/sh
+      - -c
+      - "npm run build && npm run start"
 volumes:
   mysql_data:  # Define o volume chamado "mysql_data" para persistir os dados do MySQL
   uploads:
