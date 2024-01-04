@@ -170,13 +170,13 @@ Após esses processos você já terá sua API em suas mãos, agora você vai pre
 2. Após entrar no container você deverá executar primeiramente o comando do ORM usado no projeto, o Sequelize o comando é:
 
     ```Node
-    npx Sequelize db:migrate 
+    npx sequelize db:migrate 
     ```
 
     Esse comando irá geral as tabelas, e por último deve executar:
 
     ```Node
-    npx Sequelize db:seed:all 
+    npx sequelize db:seed:all 
     ```
 
     Para popular o seu banco de dados, com users e students, a única coisa que não é gerada automaticamente é as images, na qual o user deve fazer o upload de uma imagem para ser associada a um Student.
