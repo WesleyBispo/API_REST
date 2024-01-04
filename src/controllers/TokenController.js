@@ -41,7 +41,7 @@ class TokenController {
       });
       return res.json({
         token,
-        msg: 'Token gerado com sucesso',
+        user: { nome: user.nome, id, email }
       });
     } catch (erro) {
       console.log(erro);
