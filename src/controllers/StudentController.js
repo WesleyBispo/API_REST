@@ -15,7 +15,7 @@ class StudentController {
           attributes: ['url', 'filename', 'originalname'],
         },
       });
-      return res.status(200).json({ lengthStudents: students.length, students });
+      return res.status(200).json({ lengthStudents: students.length, dataStudents: students });
     } catch (erro) {
       return res.status(500).json({ error: ['Erro ao listar todos Students'] });
     }
