@@ -3,49 +3,64 @@ version: '3.8'
 services:
   # Serviço MySQL
   my_mysql:
-    image: mysql:8.0  # Usa a imagem oficial do MySQL na versão 8.0
+    image: mysql:8.0 # Usa a imagem oficial do MySQL na versão 8.0
     environment:
-      MYSQL_ROOT_PASSWORD: root  # Configura a senha do usuário root
-      MYSQL_DATABASE: escola  # Cria um banco de dados chamado "escola"
+      MYSQL_ROOT_PASSWORD: root # Configura a senha do usuário root
+      MYSQL_DATABASE: escola # Cria um banco de dados chamado "escola"
     ports:
-      - "33061:3306"  # Mapeia a porta 3306 do host para a porta 33061 do MySQL no container
+      - "33061:3306" # Mapeia a porta 3306 do host para a porta 33061 do MySQL no container
     volumes:
-      - mysql_data:/var/lib/mysql  # Configura um volume para persistir os dados do MySQL
+      - mysql_data:/var/lib/mysql # Configura um volume para persistir os dados do MySQL
     networks:
-      - backend_network  # Conecta o serviço à rede chamada "backend_network"
-    command: ["--default-authentication-plugin=mysql_native_password"] # Adicionado para garantir que o plugin de autenticação padrão seja mysql_native_password
-    healthcheck: # Adicionado para verificar a saúde do serviço MySQL
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      - backend_network # Conecta o serviço à rede chamada "backend_network"
+    command: [ "--default-authentication-plugin=mysql_native_password" ] # Adicionado para garantir que o plugin de autenticação padrão seja mysql_native_password
+    healthcheck:
+      # Adicionado para verificar a saúde do serviço MySQL
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MYSQL_ROOT_PASSWORD}"
+        ]
 
   # Serviço da sua aplicação Node.js
   api_node:
     build:
-      context: .  # Usa o diretório atual como contexto para construir a imagem
-      dockerfile: Dockerfile  # Usa o Dockerfile no mesmo diretório
-    image: api_node  # Nome da imagem para o serviço
+      context: . # Usa o diretório atual como contexto para construir a imagem
+      dockerfile: Dockerfile # Usa o Dockerfile no mesmo diretório
+    image: api_node # Nome da imagem para o serviço
     environment:
-      PORT: 3000  # Configura a porta em que a aplicação Node.js estará disponível
-      DATABASE_NAME: escola  # Nome do banco de dados usado pela aplicação
-      DATABASE_HOST: my_mysql  # Host do banco de dados (nome do serviço MySQL)
-      DATABASE_PORT: 3306  # Porta do MySQL no container
-      DATABASE_USERNAME: root  # Usuário do banco de dados
-      DATABASE_PASSWORD: root  # Senha do banco de dados
-      TOKEN_SECRET: ABCD12345  # Chave secreta para tokens de autenticação
-      TOKEN_EXPIRATION: 7d  # Tempo de expiração dos tokens (7 dias)
+      PORT: 3000 # Configura a porta em que a aplicação Node.js estará disponível
+      DATABASE_NAME: escola # Nome do banco de dados usado pela aplicação
+      DATABASE_HOST: my_mysql # Host do banco de dados (nome do serviço MySQL)
+      DATABASE_PORT: 3306 # Porta do MySQL no container
+      DATABASE_USERNAME: root # Usuário do banco de dados
+      DATABASE_PASSWORD: root # Senha do banco de dados
+      TOKEN_SECRET: ABCD12345 # Chave secreta para tokens de autenticação
+      TOKEN_EXPIRATION: 7d # Tempo de expiração dos tokens (7 dias)
     ports:
-      - "3000:3000"  # Mapeia a porta 3000 do host para a porta 3000 da aplicação no container
+      - "3000:3000" # Mapeia a porta 3000 do host para a porta 3000 da aplicação no container
     depends_on:
-      - my_mysql  # Garante que o serviço MySQL esteja pronto antes de iniciar a aplicação
+      - my_mysql # Garante que o serviço MySQL esteja pronto antes de iniciar a aplicação
     volumes:
-      - uploads:/usr/src/app/uploads  # Cria um volume para a pasta de uploads
+      - uploads:/usr/src/app/dist/uploads # Cria um volume para a pasta de uploads
     networks:
-      - backend_network  # Conecta o serviço à rede chamada "backend_network"
-    command: 
+      - backend_network # Conecta o serviço à rede chamada "backend_network"
+    command:
       - /bin/sh
       - -c
-      - "npm run build && npm run start"
+      - |
+        npm run build &&
+        cd dist &&
+        mkdir -p uploads/images &&
+        npm run start
 volumes:
-  mysql_data:  # Define o volume chamado "mysql_data" para persistir os dados do MySQL
+  mysql_data: # Define o volume chamado "mysql_data" para persistir os dados do MySQL
   uploads:
 networks:
-  backend_network:  # Define a rede chamada "backend_network" para isolar os serviços
+  backend_network: # Define a rede chamada "backend_network" para isolar os serviços

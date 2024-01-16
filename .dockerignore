@@ -1,6 +1,10 @@
 .env.example
 README.md
-nodemosn.json
+nodemon.json
 .eslintrc.js
 .gitignore
 .editorconfig
+.git
+Dockerfile
+docker-compose.yml
+
