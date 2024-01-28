@@ -6,7 +6,7 @@ const router = new Router();
 router.get('/', userController.index); // Lista users
 router.get('/:id', userController.show); // Lista user
 
-router.post('/', AuthenticationMiddleware.authenticate, userController.store);
+router.post('/', userController.store);
 router.put('/', AuthenticationMiddleware.authenticate, userController.update);
 router.delete('/', AuthenticationMiddleware.authenticate, userController.delete);
 

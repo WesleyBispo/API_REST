@@ -56,35 +56,44 @@ class StudentController {
 
   async store(req, res) {
     try {
-      const novoStudent = await Student.create(req.body);
-      const {
-        id, nome, sobrenome, email, idade, altura,
-      } = novoStudent;
-      return res.json({
-        id, nome, sobrenome, email, idade, altura,
-      });
+        const novoStudent = await Student.create(req.body);
+        const { id, nome, sobrenome, email, idade, altura, peso } = novoStudent;
+        return res.json({ id, nome, sobrenome, email, idade, altura, peso });
     } catch (erro) {
-      console.log(erro);
-      return res.status(500).json({ errors: ['Erro ao criar o Student', erro.errors.map((err) => err.message)] });
+        if (erro.name === 'SequelizeValidationError' || erro.name === 'SequelizeUniqueConstraintError') {
+            const messages = erro.errors.map(err => err.message);
+            return res.status(400).json({ errors: messages });
+        }
+        console.error(erro);
+        return res.status(500).json({ errors: ['Erro interno no servidor'] });
     }
-  }
+}
 
-  async update(req, res) {
-    try {
-      if (!req.params.id) return res.status(400).json({ errors: ['ID não enviado'] });
+
+async update(req, res) {
+  try {
+      if (!req.params.id) {
+          return res.status(400).json({ errors: ['ID não enviado'] });
+      }
+
       const student = await Student.findByPk(req.params.id);
-      if (!student) return res.status(404).json({ errors: ['Student não encotrado.'] });
+      if (!student) {
+          return res.status(404).json({ errors: ['Student não encontrado.'] });
+      }
+
       const novosDados = await student.update(req.body);
-      const {
-        id, nome, sobrenome, email, idade, altura,
-      } = novosDados;
-      return res.json({
-        id, nome, sobrenome, email, idade, altura,
-      });
-    } catch (erro) {
-      return res.status(500).json({ errors: ['Erro ao atualizar o usuário', erro.errors.map((err) => err.message)] });
-    }
+      const { id, nome, sobrenome, email, idade, altura, peso } = novosDados;
+      return res.json({ id, nome, sobrenome, email, idade, altura, peso });
+  } catch (erro) {
+      if (erro.name === 'SequelizeValidationError' || erro.name === 'SequelizeUniqueConstraintError') {
+          const messages = erro.errors.map(err => err.message);
+          return res.status(400).json({ errors: messages });
+      }
+      console.error(erro);
+      return res.status(500).json({ errors: ['Erro interno no servidor'] });
   }
+}
+
 
   async delete(req, res) {
     try {
@@ -92,7 +101,7 @@ class StudentController {
       const student = await Student.findByPk(req.params.id);
       if (!student) return res.status(404).json({ errors: ['Student não encotrado.'] });
       await student.destroy();
-      return res.status(204).json({ message: 'Student do deletado' });
+      return res.status(204).json({ message: 'Student deletado' });
     } catch (erro) {
       return res.status(500).json({ errors: ['Erro ao excluir o Student'] });
     }
